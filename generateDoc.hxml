@@ -1,0 +1,4 @@
+-cmd haxe generate.hxml
+-cmd haxelib run dox -i output.xml --title "cornerContourCanvasTest documentation" -D themeColor 0x003399 -D source-path https://github.com/nanjizal/cornerContourCanvasTest/tree/master/src/ --toplevel-package cornerContourCanvasTest
+-cmd cd pages
+-cmd open index.html
