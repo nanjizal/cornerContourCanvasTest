@@ -46,8 +46,6 @@ class ContourTest {
         canvas.height = 768;
         Browser.document.body.appendChild( cast canvas );
         surface = new Surface({ x: 10, y: 10, me: canvas.getContext2d() });
-        //surface.beginFill( 0x0000ff, 1. );
-        //surface.lineStyle( 1., 0x0c0cf0, 0.2 );
     }
     /** 
      * draws the svgs
