@@ -4494,24 +4494,13 @@ cornerContour_io_Array2DTriangles.set_cy = function(this1,v) {
 	this1[(this1[0] | 0) * 7 + 5 + 1] = v;
 	return v;
 };
-cornerContour_io_Array2DTriangles.get_colorInt = function(this1) {
-	return Math.round(this1[(this1[0] | 0) * 7 + 6 + 1]);
+cornerContour_io_Array2DTriangles.get_color = function(this1) {
+	return this1[(this1[0] | 0) * 7 + 6 + 1];
 };
 cornerContour_io_Array2DTriangles.set_colorInt = function(this1,v) {
 	var v1 = v | 0;
 	this1[(this1[0] | 0) * 7 + 6 + 1] = v1;
 	return v;
-};
-cornerContour_io_Array2DTriangles.applyFill = function(this1,fill2D) {
-	var tot = (this1.length - 1) / 7 | 0;
-	var _g = 0;
-	var _g1 = tot;
-	while(_g < _g1) {
-		var i = _g++;
-		this1[0] = i;
-		fill2D(cornerContour_io_Array2DTriangles.get_ax(this1),cornerContour_io_Array2DTriangles.get_ay(this1),cornerContour_io_Array2DTriangles.get_bx(this1),cornerContour_io_Array2DTriangles.get_by(this1),cornerContour_io_Array2DTriangles.get_cx(this1),cornerContour_io_Array2DTriangles.get_cy(this1),cornerContour_io_Array2DTriangles.get_colorInt(this1));
-	}
-	return tot;
 };
 cornerContour_io_Array2DTriangles.triangle = function(this1,ax_,ay_,bx_,by_,cx_,cy_) {
 	cornerContour_io_Array2DTriangles.set_ax(this1,ax_);
@@ -4611,45 +4600,60 @@ cornerContourCanvasTest_ContourTest.prototype = {
 		this.birdSVG();
 		this.cubicSVG();
 		this.quadSVG();
-		var _e = this.surface;
-		var fill2D = function(ax,ay,bx,by,cx,cy,color) {
+		this.rearrageDrawData();
+	}
+	,rearrageDrawData: function() {
+		var pen = this.pen2D;
+		var data = pen.arr;
+		var totalTriangles = (data.length - 1) / 7 | 0;
+		var _g = 0;
+		var _g1 = totalTriangles;
+		while(_g < _g1) {
+			var i = _g++;
+			pen.arr[0] = i;
+			var this1 = this.surface;
+			var ax = cornerContour_io_Array2DTriangles.get_ax(data);
+			var ay = cornerContour_io_Array2DTriangles.get_ay(data);
+			var bx = cornerContour_io_Array2DTriangles.get_bx(data);
+			var by = cornerContour_io_Array2DTriangles.get_by(data);
+			var cx = cornerContour_io_Array2DTriangles.get_cx(data);
+			var cy = cornerContour_io_Array2DTriangles.get_cy(data);
+			var color = cornerContour_io_Array2DTriangles.get_color(data) | 0;
 			var alpha = null;
 			if(alpha != null && alpha != 1.0) {
 				var r = color >> 16 & 255;
 				var g = color >> 8 & 255;
 				var b = color & 255;
-				_e.me.fillStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+				this1.me.fillStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
 			} else {
-				var fill2D = StringTools.hex(color,6);
-				_e.me.fillStyle = "#" + fill2D;
+				var tmp = StringTools.hex(color,6);
+				this1.me.fillStyle = "#" + tmp;
 			}
-			_e.me.beginPath();
-			var alpha = null;
-			_e.me.lineWidth = 0.0;
-			if(alpha != null && alpha != 1.0) {
-				var r = color >> 16 & 255;
-				var g = color >> 8 & 255;
-				var b = color & 255;
-				_e.me.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+			this1.me.beginPath();
+			var alpha1 = null;
+			this1.me.lineWidth = 0.0;
+			if(alpha1 != null && alpha1 != 1.0) {
+				var r1 = color >> 16 & 255;
+				var g1 = color >> 8 & 255;
+				var b1 = color & 255;
+				this1.me.strokeStyle = "rgba(" + r1 + "," + g1 + "," + b1 + "," + alpha1 + ")";
 			} else {
-				var fill2D = StringTools.hex(color,6);
-				_e.me.strokeStyle = "#" + fill2D;
+				var tmp1 = StringTools.hex(color,6);
+				this1.me.strokeStyle = "#" + tmp1;
 			}
-			_e.x = ax;
-			_e.y = ay;
-			_e.me.moveTo(ax,ay);
-			_e.x = bx;
-			_e.y = by;
-			_e.me.lineTo(bx,by);
-			_e.x = cx;
-			_e.y = cy;
-			_e.me.lineTo(cx,cy);
-			_e.me.stroke();
-			_e.me.closePath();
-			_e.me.fill();
-			return 1;
-		};
-		cornerContour_io_Array2DTriangles.applyFill(this.pen2D.arr,fill2D);
+			this1.x = ax;
+			this1.y = ay;
+			this1.me.moveTo(ax,ay);
+			this1.x = bx;
+			this1.y = by;
+			this1.me.lineTo(bx,by);
+			this1.x = cx;
+			this1.y = cy;
+			this1.me.lineTo(cx,cy);
+			this1.me.stroke();
+			this1.me.closePath();
+			this1.me.fill();
+		}
 	}
 	,birdSVG: function() {
 		var sketcher = new cornerContour_Sketcher(this.pen2D,4,3);
@@ -4662,7 +4666,7 @@ cornerContourCanvasTest_ContourTest.prototype = {
 		var sketcher = new cornerContour_Sketcher(this.pen2D,4,3);
 		sketcher.width = 10;
 		sketcher.colourFunction = function(colour,x,y,x_,y_) {
-			return Math.round(colour - x * y);
+			return colour - x * y | 0;
 		};
 		var translateContext = new justPath_transform_TranslationContext(sketcher,50,200);
 		var p = new justPath_SvgPath(translateContext);

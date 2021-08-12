@@ -61,8 +61,21 @@ class ContourTest {
         birdSVG();
         cubicSVG();
         quadSVG();
-        // draw to canvas surface
-        pen2D.applyFill( surface.triangle2DFill );
+        rearrageDrawData();
+    }
+    public
+    function rearrageDrawData(){
+        var pen = pen2D;
+        var data = pen.arr;
+        var totalTriangles = Std.int( data.size/7 );
+        for( i in 0...totalTriangles ){
+            pen.pos = i;
+            // draw to canvas surface
+            surface.triangle2DFill( data.ax, data.ay
+                , data.bx, data.by
+                , data.cx, data.cy
+                , Std.int( data.color ) );
+        }
     }
     /**
      * draws Kiwi svg
@@ -84,7 +97,7 @@ class ContourTest {
         sketcher.width = 10;
         // function to adjust color of curve along length
         sketcher.colourFunction = function( colour: Int, x: Float, y: Float, x_: Float, y_: Float ):  Int {
-            return Math.round( colour-1*x*y );
+            return Std.int( colour-1*x*y );
         }
         var translateContext = new TranslationContext( sketcher, 50, 200 );
         var p = new SvgPath( translateContext );
